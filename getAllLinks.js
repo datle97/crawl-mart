@@ -62,6 +62,16 @@ const fs = require("fs");
         productUrls
       );
 
+      //tạo folder data nếu chưa tồn tại
+      if (!fs.existsSync("data")) {
+        fs.mkdirSync("data");
+      }
+
+      // tạo file links nếu chưa tồn tạo
+      if (!fs.existsSync("data/links.json")) {
+        fs.writeFileSync(`data/links.json`, "");
+      }
+
       // đọc file links
       const fileData = fs.readFileSync("data/links.json");
 
@@ -72,55 +82,12 @@ const fs = require("fs");
       } else {
         // nếu đã có dữ liệu
         // push data vào array đã có
-        var parseFileData = JSON.parse(fileData);
+        const parseFileData = JSON.parse(fileData);
         parseFileData.push(productLinks);
         fs.writeFileSync("data/links.json", JSON.stringify(parseFileData));
       }
     }
   }
-
-  // mod dữ liệu vừa crawl theo title
-  const modifiedData = parseFileData.reduce((acc, cur) => {
-    const index = acc.findIndex((item) => item.title === cur.title);
-    if (index === -1) {
-      acc.push({
-        title: cur.title,
-        data: [{ page: cur.page, links: [cur.links] }],
-      });
-    } else {
-      acc[index].data.push({ page: cur.page, links: cur.links });
-    }
-    return acc;
-  }, []);
-
-  fs.writeFileSync("data/modifiedLinks.json", JSON.stringify(modifiedData));
-
-  // for (let vanPhongPham of productLinks) {
-  //   await page.goto(vanPhongPham.url);
-  //   const info = await page.evaluate(() => {
-  //     const items = document.querySelectorAll(
-  //       "div.product-thumb-w.gallery-thumb a"
-  //     );
-  //     const images = [];
-  //     items.forEach((item) => {
-  //       images.push("https://www.zenmart.vn" + item.getAttribute("href"));
-  //     });
-
-  //     const title = document.querySelector("h1.product-title").innerText;
-  //     const code = document.querySelector("span.product-code span").innerText;
-  //     const description = document.querySelector(
-  //       "div.product-description.editor-ct"
-  //     ).innerText;
-  //     const price = document.querySelector("div.price-box span.price")
-  //       .innerText;
-
-  //     const detail = document.querySelector(
-  //       ".pd-t-xs-3.pd-l-xs-3.pd-r-xs-3.editor-ct"
-  //     ).innerHTML;
-  //     return { title, code, images, description, price, detail };
-  //   });
-  //   // console.log(info);
-  // }
 
   await browser.close();
 })();

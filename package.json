@@ -1,10 +1,10 @@
 {
-  "name": "anime",
+  "name": "crawl-mart",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js --ignore data/*"
+    "start": "nodemon index.js"
   },
   "author": "Dat Le",
   "license": "ISC",
