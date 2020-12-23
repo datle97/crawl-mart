@@ -21,12 +21,11 @@ mongoose
   .catch((err) => console.log(err));
 
 app.post("/postall", (req, res) => {
-  const data = fs.readdirSync("./data/filterProducts");
+  const data = fs.readdirSync("./data/modifiedProducts");
   const keys = data.map((item) => item.slice(0, -5));
-
   for (let i = 0; i < data.length; i++) {
     const fileData = JSON.parse(
-      fs.readFileSync(`data/filterProducts/${data[i]}`)
+      fs.readFileSync(`data/modifiedProducts/${data[i]}`)
     );
     for (let j = 0; j < fileData.length; j++) {
       const newProduct = new Products[keys[i]](fileData[j]);
@@ -43,9 +42,9 @@ app.post("/postall", (req, res) => {
 });
 
 app.post("/deleteall", (req, res) => {
-  for (let i = 0; i < newProducts.length; i++) {
-    console.log("ok");
-    newProducts[i].deleteMany({}, (err) => {});
+  const keys = Object.keys(Products);
+  for (let i = 0; i < keys.length; i++) {
+    Products[keys[i]].deleteMany({}, (err) => {});
   }
 });
 
